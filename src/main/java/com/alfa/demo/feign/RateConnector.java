@@ -55,6 +55,7 @@ public class RateConnector {
 
         RateDto rateDto = rateClient.getOldRates(simpleDateFormat.format(yestDate), appId, base);
         System.out.println(rateDto.toString());
+        System.out.println("Изучаю");
         return rateDto;
     }
 }
