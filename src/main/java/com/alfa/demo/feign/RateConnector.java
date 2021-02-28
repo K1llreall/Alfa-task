@@ -1,6 +1,7 @@
 package com.alfa.demo.feign;
 
 import com.alfa.demo.dto.RateDto;
+import com.alfa.demo.feign.clients.RateClient;
 import feign.Feign;
 import feign.Logger;
 import feign.gson.GsonDecoder;
@@ -12,9 +13,7 @@ import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
+
 
 
 @Component
@@ -50,20 +49,18 @@ public class RateConnector {
             base = "USD";
         }
         LocalDate date= LocalDate.now();
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd");
         LocalDate yestDate = date.plusDays(-1);
 
-        RateDto rateDto = rateClient.getOldRates(simpleDateFormat.format(yestDate), appId, base);
+        RateDto rateDto = rateClient.getOldRates(yestDate.toString(), appId, base);
         System.out.println(rateDto.toString());
-        System.out.println("Изучаю");
         return rateDto;
+    }
+
+    public boolean isLatestRatesUpperThanYesterday(String base) {
+        RateDto latestRates = getLatestRates(base);
+        RateDto yesterdayRates = getOldRates(base);
+
+        return latestRates.getRates().getRUB() > yesterdayRates.getRates().getRUB();
     }
 }
 
-
-//Здесь же создать метод, который смотрит вчерашние рейты
-//1. Создать метод в RateClient(метод возвращает RateDto)
-//2. В метод должны передаваться Дата в формате yyyy-mm-dd, app_id, base
-//3. Создать здесь метод который вызывает метод созданный в пункте один и возвращающий rateDto
-//4. в классе Runner добавить вызов метода созданного в пункте 3
-//5. Отправить код на гитхаб и показать мне бибу

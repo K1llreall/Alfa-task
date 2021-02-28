@@ -59,6 +59,7 @@ public class RateDto {
 
     public void setRates(RubRate rates)
     {
+
         this.rates = rates;
     }
 
